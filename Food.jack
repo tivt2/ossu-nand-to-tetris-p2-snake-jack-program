@@ -1,0 +1,45 @@
+class Food {
+  field int x;
+  field int y;
+  field Grid grid;
+  field RandNumberGen rand;
+ 
+  constructor Food new(Grid n_grid) {
+    let rand = RandNumberGen.new(7);
+    do randPos();
+    let grid = n_grid;
+
+    return this;
+  }
+
+  method int getX() { return x; }
+  method int getY() { return y; }
+
+  method void randPos() {
+    let x = rand.generate();
+    let y = rand.generate();
+    return;
+  }
+
+  method void newFood() {
+    do randPos();
+    do draw();
+    return;
+  }
+  
+  method void draw() {
+    do grid.drawCell(x, y, true);
+    return;
+  }
+
+  method void clear() {
+    do grid.drawCell(x, y, false);
+    return;
+  }
+
+  method void dispose() {
+    do rand.dispose();
+    do Memory.deAlloc(this);
+    return;
+  }
+}

@@ -1,0 +1,24 @@
+class RandNumberGen {
+  field int seed;
+
+  constructor RandNumberGen new(int n_seed) {
+    let seed = n_seed;
+    return this;
+  }
+
+  method int generate() {
+    var int a,c;
+
+    let a = 11;
+    let c = 1;
+
+    let seed = ~((a * seed) + c) & 31;
+
+    return seed;
+  }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return;
+  }
+}
