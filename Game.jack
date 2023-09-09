@@ -1,0 +1,72 @@
+class Game {
+  field Grid grid;
+  field Snake snake;
+  field int points;
+  field Food food;
+
+  constructor Game new() {
+    let grid = Grid.new();
+    let snake = Snake.new(grid);
+    let points = 0;
+    let food = Food.new(grid);
+
+    return this;
+  }
+
+  method void run() {
+    var boolean exit;
+    var char key;
+    var boolean isColision;
+    let exit = false;
+
+    do grid.drawBlackBars();
+    do food.draw();
+    do snake.draw();
+
+    while (~(exit)) {
+      if (snake.checkColision()) {
+        do restart();
+      }
+
+      let key = Keyboard.keyPressed();
+      if (key = 131) { do snake.setDir(0);}
+      if (key = 132) { do snake.setDir(1);}
+      if (key = 133) { do snake.setDir(2);}
+      if (key = 130) { do snake.setDir(3);}
+
+      do snake.move(checkEating());
+      do Sys.wait(15);
+    }
+
+    return;
+  }
+
+  method void restart() {
+    do Screen.clearScreen();
+    do grid.drawBlackBars();
+    do food.newFood();
+    let snake = Snake.new(grid);
+    let points = 0;
+
+    return;
+  }
+
+  method boolean checkEating() {
+    if ((snake.getHeadX() = food.getX()) & (snake.getHeadY() = food.getY())) {
+      let points = points + 1;
+      do food.newFood();
+
+      return true;
+    }
+
+    return false;
+  }
+
+  method void dispose() {
+    do grid.dispose();
+    do snake.dispose();
+    do food.dispose();
+    do Memory.deAlloc(this);
+    return;
+  }
+}

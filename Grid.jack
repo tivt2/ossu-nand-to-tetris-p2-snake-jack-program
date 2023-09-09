@@ -1,0 +1,33 @@
+class Grid {
+  field int size;
+  field int offset;
+
+  constructor Grid new() {
+    let size = 8;
+    let offset = 126;
+    return this;
+  }
+
+  method void drawBlackBars() {
+    var int xEnd;
+    let xEnd = offset + 256;
+    do Screen.setColor(true);
+    do Screen.drawRectangle(0, 0, offset-1, 255);
+    do Screen.drawRectangle(xEnd, 0, 511, 255);
+    return;
+  }
+
+  method void drawCell(int x, int y, bool color) {
+    var int xStart, yStart;
+    let xStart = offset+(x*size);
+    let yStart = (y*size);
+    do Screen.setColor(color);
+    do Screen.drawRectangle(xStart, yStart, xStart + size-1, yStart + size-1);
+    return;
+  }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return;
+  }
+}
