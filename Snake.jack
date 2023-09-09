@@ -1,0 +1,123 @@
+class Snake {
+  field SnakeCell head;
+  field SnakeCell tail;
+  field int dir; // 0:up, 1:right, 2:down, 3:left
+
+  field Grid grid;
+
+  constructor Snake new(Grid n_grid) {
+    let head = SnakeCell.new(1,16,n_grid);
+    let tail = SnakeCell.new(0,16,n_grid);
+    do head.setChild(tail);
+    do tail.setParent(head);
+    let dir = 1;
+    let grid = n_grid;
+
+    return this;
+  }
+
+  method int getHeadX() { return head.getX(); }
+  method int getHeadY() { return head.getY(); }
+
+  method void setDir(int n_dir) { let dir = n_dir; return; }
+
+  method void move(boolean eating) {
+    var SnakeCell newTail;
+    if (eating) {
+      let newTail = SnakeCell.new(tail.getX(), tail.getY(), grid);
+      do tail.setChild(newTail);
+      do newTail.setParent(tail);
+      let tail = newTail;
+    } else {
+      do tail.clear();
+    }
+
+    if (dir = 0) {
+      if (head.getY() = 0) {
+        do tail.setY(31);
+      } else {
+        do tail.setY(head.getY() - 1);
+      }
+      do tail.setX(head.getX());
+    }
+    if (dir = 1) {
+      if (head.getX() = 31) {
+        do tail.setX(0);
+      } else {
+        do tail.setX(head.getX() + 1);
+      }
+      do tail.setY(head.getY());
+    }
+    if (dir = 2) {
+      if (head.getY() = 31) {
+        do tail.setY(0);
+      } else {
+        do tail.setY(head.getY() + 1);
+      }
+      do tail.setX(head.getX());
+    }
+    if (dir = 3) {
+      if (head.getX() = 0) {
+        do tail.setX(31);
+      } else {
+        do tail.setX(head.getX() - 1);
+      }
+      do tail.setY(head.getY());
+    }
+
+    do tail.setChild(head);
+    do head.setParent(tail);
+    let head = head.getParent();
+    let tail = tail.getParent();
+    do tail.setChild(null);
+    do head.setParent(null);
+
+    do head.draw();
+
+    return;
+  }
+
+  method void draw() {
+    var SnakeCell curr;
+    let curr = head;
+
+    while (~(curr = null)) {
+      do curr.draw();
+
+      let curr = curr.getChild();
+    }
+    return;
+  }
+
+  // return a true if colision, false otherwise
+  method boolean checkColision() {
+    var SnakeCell curr;
+    var boolean out;
+    var int hX,hY;
+
+    let curr = head.getChild();
+    let out = false;
+    let hX = head.getX();
+    let hY = head.getY();
+
+    while (~out & ~(curr = null)) {
+      let out = ((curr.getX() = hX) & (curr.getY() = hY));
+
+      let curr = curr.getChild();
+    }
+
+    return out;
+  }
+
+  method void dispose() {
+    var SnakeCell curr;
+    let curr = head;
+
+    while (~(curr = null)) {
+      do curr.dispose();
+
+      let curr = curr.getChild();
+    }
+    return;
+  }
+}

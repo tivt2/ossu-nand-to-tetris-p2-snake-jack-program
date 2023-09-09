@@ -1,0 +1,50 @@
+class SnakeCell {
+  field SnakeCell parent;
+  field SnakeCell child;
+
+  field int x;
+  field int y;
+
+  field Grid grid;
+
+  constructor SnakeCell new(int n_x, int n_y, Grid n_grid) {
+    let x = n_x;
+    let y = n_y;
+    let grid = n_grid;
+
+    let parent = null;
+    let child = null;
+    return this;
+  }
+
+  method int getX() { return x; }
+  method void setX(int n_x) { let x = n_x; return; }
+  method int getY() { return y; }
+  method void setY(int n_y) { let y = n_y; return; }
+
+  method SnakeCell getParent() { return parent; }
+  method void setParent(SnakeCell n_parent) {
+    let parent = n_parent;
+    return;
+   }
+  method SnakeCell getChild() { return child; }
+  method void setChild(SnakeCell n_child) {
+    let child = n_child;
+    return;
+  }
+
+  method void draw() {
+    do grid.drawCell(x, y, true);
+    return;
+  }
+
+  method void clear() {
+    do grid.drawCell(x, y, false);
+    return;
+  }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return;
+  }
+}
